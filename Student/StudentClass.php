@@ -1,5 +1,4 @@
 <?php
-require_once("../Admin/TestClass.php");
 class Student
 {
     public $sid;

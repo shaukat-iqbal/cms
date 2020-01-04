@@ -117,7 +117,7 @@
 
         function sendGetReq() {
             let s = document.getElementById("course").value;
-            window.location = "http://localhost:8080/webproject/Admin/index.php?source=" + s;
+            window.location = "http://localhost:8080/webproject/faculty/index.php?source=" + s;
         }
     </script>
 
@@ -125,76 +125,89 @@
 
 <body>
 
+
     <?php
 
-    include_once("navigation.html");
+    include_once("navbar.html");
     ?>
-    <div class="container mt-5">
-        <div class="border rounded ">
-            <input type="hidden" id="cId" value="<?= $cId ?>">
-            <input type="hidden" id="sId" value="<?= $sId ?>">
-            <h4 class="text-center text-white pt-3 m-0 bg-dark border rounded border-dark">Final Grades</h4>
-            <div class="pt-3 d-flex justify-content-around">
-                <div class="d-inline-block">
-                    <label class="d-inline-block">Subject Name: </label>
-                    <label class="d-inline-block"><strong>Physics</strong></label>
-                </div>
 
-                <div class="d-inline-block">
-                    <label class="d-inline-block">Marks: </label>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="m-0 pl-0 pr-2">
+                <?php
+                include_once("sidebar.html");
+                ?>
+            </div>
+            <div class="col-md-10">
+                <div class="container mt-5">
+                    <div class="border rounded ">
+                        <input type="hidden" id="cId" value="<?= $cId ?>">
+                        <input type="hidden" id="sId" value="<?= $sId ?>">
+                        <h4 class="text-center text-white pt-3 m-0 bg-dark border rounded border-dark">Final Grades</h4>
+                        <div class="pt-3 d-flex justify-content-around">
+                            <div class="d-inline-block">
+                                <label class="d-inline-block">Subject Name: </label>
+                                <label class="d-inline-block"><strong>Physics</strong></label>
+                            </div>
 
-                    <input class="d-inline-block" name="finalMarks" id="finalMarks" readonly type="number" value="<?= $finalMarks ?>">
-                </div>
-                <div class="d-inline-block" style="width: 100px">
-                    <button class="btn btn-secondary btn-sm " id="editFinalMarks">Edit</button>
-                    <button class="btn btn-primary btn-sm " hidden id="updateFinalMarks">Update</button>
+                            <div class="d-inline-block">
+                                <label class="d-inline-block">Marks: </label>
+
+                                <input class="d-inline-block" name="finalMarks" id="finalMarks" readonly type="number" value="<?= $finalMarks ?>">
+                            </div>
+                            <div class="d-inline-block" style="width: 100px">
+                                <button class="btn btn-secondary btn-sm " id="editFinalMarks">Edit</button>
+                                <button class="btn btn-primary btn-sm " hidden id="updateFinalMarks">Update</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded mt-5">
+
+                        <h4 class="text-center text-white pt-3 m-0 bg-dark border rounded border-dark">Assignments</h4>
+                        <?php
+                        foreach ($assignments as $assignment) {
+                        ?>
+                            <div class="pt-3 d-flex justify-content-around" id="<?= $assignment['aId'] ?>">
+                                <div class="d-inline-block">
+                                    <label class="d-inline-block">Assignment#: </label>
+                                    <label class="d-inline-block"><strong><?= $assignment['assignmentNo'] ?></strong></label>
+                                </div>
+
+                                <div class="d-inline-block">
+                                    <label class="d-inline-block">Marks: </label>
+                                    <input class="d-inline-block" name="aMarks" id="aMarks" readonly type="number" value="<?= $assignment['marks'] ?>">
+
+                                </div>
+                                <div class="d-inline-block" style="width: 100px">
+                                    <button class="btn btn-secondary btn-sm " name="editAMarks" onclick="editAssignmentMarks(<?= $assignment['aId'] ?>)">Edit</button>
+                                    <button class="btn btn-primary btn-sm " name="updateAMarks" hidden onclick="updateAssignmentMarks(<?= $assignment['aId'] ?>)" id="updateAssignmentMarks">Update</button>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        ?>
+                        <h6 class="text-center pt-2">Add new Assignment</h6>
+                        <div class="pt-3 d-flex justify-content-around" id="#newAssignment">
+                            <div class="d-inline-block">
+                                <label class="d-inline-block">Assignment#: </label>
+                                <label class="d-inline-block"><strong><?= count($assignments) + 1 ?></strong></label>
+                            </div>
+
+                            <div class="d-inline-block">
+                                <label class="d-inline-block">Marks: </label>
+                                <input class="d-inline-block" name="nMarks" id="nMarks" type="number" value="0">
+
+                            </div>
+                            <div class="d-inline-block" style="width: 100px">
+                                <button class="btn btn-secondary btn-sm " name="editAMarks" onclick="addAssignmentMarks('<?= $cId ?>','<?= $sId ?>','<?= count($assignments) + 1 ?>')">Insert</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
-        <div class="border rounded mt-5">
-
-            <h4 class="text-center text-white pt-3 m-0 bg-dark border rounded border-dark">Assignments</h4>
-            <?php
-            foreach ($assignments as $assignment) {
-            ?>
-                <div class="pt-3 d-flex justify-content-around" id="<?= $assignment['aId'] ?>">
-                    <div class="d-inline-block">
-                        <label class="d-inline-block">Assignment#: </label>
-                        <label class="d-inline-block"><strong><?= $assignment['assignmentNo'] ?></strong></label>
-                    </div>
-
-                    <div class="d-inline-block">
-                        <label class="d-inline-block">Marks: </label>
-                        <input class="d-inline-block" name="aMarks" id="aMarks" readonly type="number" value="<?= $assignment['marks'] ?>">
-
-                    </div>
-                    <div class="d-inline-block" style="width: 100px">
-                        <button class="btn btn-secondary btn-sm " name="editAMarks" onclick="editAssignmentMarks(<?= $assignment['aId'] ?>)">Edit</button>
-                        <button class="btn btn-primary btn-sm " name="updateAMarks" hidden onclick="updateAssignmentMarks(<?= $assignment['aId'] ?>)" id="updateAssignmentMarks">Update</button>
-                    </div>
-                </div>
-            <?php
-            }
-            ?>
-            <h6 class="text-center pt-2">Add new Assignment</h6>
-            <div class="pt-3 d-flex justify-content-around" id="#newAssignment">
-                <div class="d-inline-block">
-                    <label class="d-inline-block">Assignment#: </label>
-                    <label class="d-inline-block"><strong><?= count($assignments) + 1 ?></strong></label>
-                </div>
-
-                <div class="d-inline-block">
-                    <label class="d-inline-block">Marks: </label>
-                    <input class="d-inline-block" name="nMarks" id="nMarks" type="number" value="0">
-
-                </div>
-                <div class="d-inline-block" style="width: 100px">
-                    <button class="btn btn-secondary btn-sm " name="editAMarks" onclick="addAssignmentMarks('<?= $cId ?>','<?= $sId ?>','<?= count($assignments) + 1 ?>')">Insert</button>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 </body>
